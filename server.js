@@ -34,6 +34,7 @@ app.get('/api/:query', (req, res) => {
     fetch(url + query, imgurOptions).then((resp) => {
       return resp.json()
     }).then((data) => {
+      if(data.data.items) {
       let responseData = data.data.items.map((el) => {
         return {
             url: el.link,
@@ -44,6 +45,9 @@ app.get('/api/:query', (req, res) => {
         });
       cacheObj[query] = responseData;
       res.send(JSON.stringify(responseData.slice(offsetStart, offsetEnd)));
+    } else {
+      res.send(JSON.stringify(data));
+    }
     });
 
     } else {
